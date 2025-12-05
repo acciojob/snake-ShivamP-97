@@ -6,7 +6,7 @@ for (let i = 1; i <= 1600; i++) {
   gameContainer.appendChild(px);
 }
 
-let snake = [761]; 
+let snake = [761];
 let direction = 1; 
 let score = 0;
 let foodPixelNumber = 0;
@@ -34,19 +34,18 @@ function drawSnake() {
     .forEach(px => px.classList.remove("snakeBodyPixel"));
 
   snake.forEach(id => {
-    const px = document.getElementById("pixel" + id);
-    px.classList.add("snakeBodyPixel");
+    document.getElementById("pixel" + id).classList.add("snakeBodyPixel");
   });
 }
 
 function gameOver() {
-  console.log("Game Over", score);
+  console.log("Game Over:", score);
   clearInterval(gameLoop);
 }
 
 function moveSnake() {
-  let head = snake[0];
-  let newHead = head + direction;
+  const head = snake[0];
+  const newHead = head + direction;
 
   if (direction === -1 && head % 40 === 1) return gameOver();
   if (direction === 1 && head % 40 === 0) return gameOver();
@@ -68,7 +67,7 @@ function moveSnake() {
   drawSnake();
 }
 
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowUp" && direction !== 40) direction = -40;
   if (e.key === "ArrowDown" && direction !== -40) direction = 40;
   if (e.key === "ArrowLeft" && direction !== 1) direction = -1;
@@ -77,5 +76,6 @@ document.addEventListener("keydown", e => {
 
 drawSnake();
 placeFood();
+moveSnake();  
 
 const gameLoop = setInterval(moveSnake, 100);

@@ -69,4 +69,5 @@ document.addEventListener("keydown", (e) => {
 
 drawSnake();
 placeFood();
+moveSnake();
 const gameLoop = setInterval(moveSnake, 100);

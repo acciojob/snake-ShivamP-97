@@ -8,46 +8,49 @@ for (let i = 1; i <= 1600; i++) {
 }
 
 let snake = [761]; 
-let direction = 1;
+let direction = 1; 
 let score = 0;
+let foodPixelNumber = 0;
 
 const DIR = {
-  "ArrowUp": -40,
-  "ArrowDown": 40,
-  "ArrowLeft": -1,
-  "ArrowRight": 1
+  ArrowUp: -40,
+  ArrowDown: 40,
+  ArrowLeft: -1,
+  ArrowRight: 1,
 };
 
-let foodPixelNumber = 0;
+let firstFood = true;
 
 function placeFood() {
   if (foodPixelNumber !== 0) {
     document.getElementById("pixel" + foodPixelNumber).classList.remove("food");
   }
 
-  let newFood;
-  do {
-    newFood = Math.floor(Math.random() * 1600) + 1;
-  } while (snake.includes(newFood));
+  if (firstFood) {
+    foodPixelNumber = snake[0] + 1; 
+    firstFood = false;
+  } else {
+    do {
+      foodPixelNumber = Math.floor(Math.random() * 1600) + 1;
+    } while (snake.includes(foodPixelNumber));
+  }
 
-  foodPixelNumber = newFood;
-
-  const foodPixel = document.getElementById("pixel" + foodPixelNumber);
-  foodPixel.classList.add("food");
+  document.getElementById("pixel" + foodPixelNumber).classList.add("food");
 }
 
 function drawSnake() {
-  document.querySelectorAll(".snakeBodyPixel")
-    .forEach(pixel => pixel.classList.remove("snakeBodyPixel"));
+  document.querySelectorAll(".snakeBodyPixel").forEach((px) => {
+    px.classList.remove("snakeBodyPixel");
+  });
 
-  snake.forEach(id => {
-    document.getElementById("pixel" + id).classList.add("snakeBodyPixel");
+  snake.forEach((pxId) => {
+    document.getElementById("pixel" + pxId).classList.add("snakeBodyPixel");
   });
 }
 
 function gameOver() {
-  alert("Game Over! Final Score: " + score);
-  location.reload();
+  console.log("Game Over:", score);
+  clearInterval(gameLoop); 
 }
 
 function moveSnake() {
@@ -55,24 +58,21 @@ function moveSnake() {
   let newHead = head + direction;
 
   if (direction === -1 && head % 40 === 1) return gameOver();
-  
   if (direction === 1 && head % 40 === 0) return gameOver();
-  
   if (direction === -40 && head <= 40) return gameOver();
-  
   if (direction === 40 && head > 1560) return gameOver();
 
   snake.unshift(newHead);
 
   if (newHead === foodPixelNumber) {
     score++;
-    document.getElementById("pointsEarned").innerText = score;
+    document.getElementById("pointsEarned").textContent = score;
     placeFood();
   } else {
-    snake.pop();
+    snake.pop(); 
   }
 
-  if (snake.filter(x => x === newHead).length > 1) return gameOver();
+  if (snake.filter((x) => x === newHead).length > 1) return gameOver();
 
   drawSnake();
 }
@@ -90,4 +90,5 @@ document.addEventListener("keydown", (e) => {
 
 drawSnake();
 placeFood();
-setInterval(moveSnake, 100); 
+
+const gameLoop = setInterval(moveSnake, 100); 

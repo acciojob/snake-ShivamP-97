@@ -7,7 +7,7 @@ for (let i = 1; i <= 1600; i++) {
   gameContainer.appendChild(pixel);
 }
 
-let snake = [761]; 
+let snake = [761, 760]; 
 let direction = 1; 
 let score = 0;
 let foodPixelNumber = 0;
